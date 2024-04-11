@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import noImage from '../assets/no-image.png';
+import type { IImage } from '@/stores/product'
+
 
 interface Props {
-  imageSrc: string
+  image: IImage | undefined
+  width: string
+  height: string
 }
 const imageSrc = computed(() => {
-  if (props.imageSrc) {
-    return 'something'
+  if (props.image) {
+    return `data:image/jpeg;base64, ${props.image.imageData}`
   }
   return noImage
 })
@@ -16,7 +20,8 @@ const props = defineProps<Props>()
 
 <template>
   <v-img
-    :width="300"
+    :width="width"
+    :height="height"
     aspect-ratio="16/9"
     cover
     :src="imageSrc"

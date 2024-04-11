@@ -17,18 +17,15 @@ export async function loginHandler(
   req: Request,
   res: Response
 ) {
-  console.log('incoming', req.body);
   const { email, password } = req.body;
 
   const user = await getUserByEmail(email);
-  console.log('user', user);
 
   if (!user) {
     return res.status(404).json({
       type: 'error',
       message: "User not found",
     });
-    // return res.status(404).send({ message: "User not found" });
   }
   if (user && !checkUserPassword(password, user)) {
     return res.status(401).send({
@@ -42,7 +39,6 @@ export async function loginHandler(
   };
 
   const token = generateAccessToken(payload);
-  console.log('token will be', token);
 
   res.json({
     accessToken: token,

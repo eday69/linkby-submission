@@ -2,7 +2,14 @@ import express from 'express';
 import multer from 'multer';
 import { healthCheck } from '../handler/healthcheck';
 import { loginHandler } from '../handler/loginHandler';
-import { newProductsHandler, productHandler, productOffersHandler, productsHandler } from '../handler/productsHandler';
+import {
+  newProductHandler,
+  productHandler,
+  productNewOfferHandler,
+  productOffersHandler,
+  productsHandler,
+  productUpdateHandler
+} from '../handler/productsHandler';
 
 const upload = multer({ dest: 'uploads/' })
 const router = express.Router();
@@ -12,10 +19,11 @@ router.get('/', healthCheck);
 router.post('/login', loginHandler);
 
 // Products
-router.get('/products', productsHandler); // get all products
-router.post('/product', upload.array('images', 5), newProductsHandler); // get all products
-router.get('/product/:id', productHandler); // get product :id
-router.get('/product/:id/offers', productOffersHandler); // get product :id
-router.put('/product/:id', productHandler); // get product :id
+router.get('/products', productsHandler);
+router.post('/product', upload.array('files', 5), newProductHandler);
+router.get('/product/:id', productHandler);
+router.get('/product/:id/offers', productOffersHandler);
+router.post('/product/:id/offer', productNewOfferHandler);
+router.put('/product/:id', productUpdateHandler);
 
 export default router;

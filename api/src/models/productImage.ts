@@ -6,7 +6,7 @@
  */
 import {
   DataTypes, Model, Sequelize, InferAttributes, InferCreationAttributes,
-  CreationOptional, ForeignKey, Association,
+  CreationOptional, ForeignKey,
 } from 'sequelize';
 import { Product } from './product';
 
@@ -17,15 +17,13 @@ export class ProductImage extends Model<InferAttributes<ProductImage, {}>, Infer
   declare productId: ForeignKey<Product['id']>;
   declare imageType: string;
   declare imageName: string;
-  declare imageData: Buffer;
+  declare imageData: Buffer|string;
 
   // timestamps!
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
-  declare static associations: {
-    product: Association<Product, ProductImage>;
-  };
+
 }
 
 ProductImage.init(
@@ -34,6 +32,10 @@ ProductImage.init(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true
+    },
+
+    productId: {
+      type: DataTypes.INTEGER,
     },
 
     imageType: DataTypes.STRING(128),

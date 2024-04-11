@@ -1,5 +1,12 @@
 import { Request, Response } from 'express';
-import { getProduct, getProductOffers, getProducts, insertProduct, updateProduct } from '../services/product.service';
+import {
+  getProduct,
+  getProductOffers,
+  getProducts,
+  insertOffer,
+  insertProduct,
+  updateProduct
+} from '../services/product.service';
 
 
 export async function productsHandler(
@@ -47,7 +54,7 @@ export async function productOffersHandler(
   res.json(product);
 }
 
-export async function newProductsHandler(
+export async function newProductHandler(
   req: Request,
   res: Response
 ) {
@@ -78,4 +85,17 @@ export async function productUpdateHandler(
   }
 
   res.json(product);
+}
+
+export async function productNewOfferHandler(
+  req: Request,
+  res: Response
+) {
+  if (!req) return;
+  const { id } = req.params
+  const { userId, offer } = req.body;
+
+  const product = await insertOffer(id, userId, offer);
+  return res.status(201).json({ product })
+  // res.json({ products: products.map(p => p.dataValues) });
 }

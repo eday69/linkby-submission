@@ -15,7 +15,6 @@ const form = reactive({
   name: "",
   price: 0,
   description: '',
-  images: [] as File[]
 });
 
 const maxSize = 5 * 1024 * 1024; // 5 MB
@@ -23,20 +22,17 @@ const rules = [
   (files: File[]) => !files.some(file => file.size > maxSize) || 'Image size should be less than 5 MB!',
   (files: File[]) => files.length <= 5 || 'Max amount of images is 5!',
 ];
-// const plusOne = computed(() => form.valid)
 
 async function handleSubmit() {
-  console.log('sending', {
-    form
-  })
-  await productStore.saveProduct({
-    userId: authStore.userId || 0,
-    name: form.name.valueOf(),
-    price: form.price.valueOf(),
-    description: form.description.valueOf(),
-    images: imgs.value
-  });
-  // await router.push({ name: 'landing' });
+  const formPayload = new FormData();
+  formPayload.append('userId',  (authStore.userId || 0).toString());
+  formPayload.append('name',  form.name);
+  formPayload.append('price',  form.price.toString());
+  formPayload.append('description',  form.description);
+  imgs.value.forEach(image => formPayload.append('files',  image));
+
+  await productStore.saveProduct(formPayload);
+  await router.push({ name: 'landing' });
 };
 
 async function handleCancel() {
@@ -47,6 +43,7 @@ async function handleCancel() {
 <template>
   <v-container class="pt-10">
     <v-form
+      ref="newForm"
       v-model="valid"
       @submit.prevent="handleSubmit"
       class="login-form"

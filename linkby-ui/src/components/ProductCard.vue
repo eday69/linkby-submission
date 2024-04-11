@@ -35,13 +35,22 @@ async function handleClick(id: number) {
         <div class="text-h6 mb-1">
           {{ props.product.name }}
         </div>
-        <ImageDisplay image-src="" />
+        <ImageDisplay
+          width="300"
+          height="300"
+          :image="props.product.images[0]"
+        />
         <div class="status-container">
           <div class="text-caption">
             {{ USDollar.format(props.product.price) }}
           </div>
           <div class="text-caption" v-if="props.product.status != 'Available'">
-            {{ props.product.status }}
+            <v-chip
+              variant="tonal"
+              size="small"
+              color="primary">
+              {{ props.product.status }}
+            </v-chip>
           </div>
         </div>
       </div>

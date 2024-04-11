@@ -8,14 +8,14 @@ module.exports = {
         userId: 1,
         productId: 2,
         offer: 45,
-        createdAt: new Date(),
+        createdAt: new Date(Date.now() - 5000 * 60 ),
         updatedAt: new Date(),
       },
       {
         userId: 2,
         productId: 2,
         offer: 44,
-        createdAt: new Date(),
+        createdAt: new Date(Date.now() - 4000 * 60),
         updatedAt: new Date(),
       },
       {

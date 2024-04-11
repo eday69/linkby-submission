@@ -1,3 +1,4 @@
+import fs from 'fs';
 import { Product } from '../models/product';
 import { User } from '../models/user';
 import { ProductImage } from '../models/productImage';
@@ -5,11 +6,31 @@ import { ProductOffer } from '../models/productoffer';
 
 export const getProducts = async (): Promise<Product[]> => {
   return Product.findAll({
-    include: {
-      model: User,
-      as: 'user',
-      attributes: ['id', 'name']
-    },
+    include: [
+      {
+        model: User,
+        as: 'user',
+        attributes: ['id', 'name']
+      },
+      {
+        model: ProductImage,
+        as: 'images',
+        limit: 1
+      }
+    ]
+  })
+  .then(products => {
+    products.forEach(product => {
+      const images = product?.images;
+      if (images) {
+        images.map(image => {
+          const imageData = image.imageData.toString('base64');
+          image['imageData'] = imageData;
+        });
+      }
+      return product;
+    });
+    return products;
   });
 };
 
@@ -22,7 +43,21 @@ export const getProduct = async (id: string): Promise<Product|null> => {
         as: 'user',
         attributes: ['id', 'name']
       },
+      {
+        model: ProductImage,
+        as: 'images'
+      }
     ]
+  })
+  .then(product => {
+    const images = product?.images;
+    if (images) {
+      images.map(image => {
+        const imageData = image.imageData.toString('base64');
+        image['imageData'] = imageData;
+      });
+    }
+    return product
   })
 };
 
@@ -59,14 +94,6 @@ export const insertProduct = async (
   description: string,
   images: Express.Multer.File[]|undefined
 ): Promise<Product> => {
-  console.log('to insert', {
-    userId,
-    name,
-    description,
-    price,
-    images,
-    status: 'Available'
-  });
   const newProduct = await Product.create({
     userId,
     name,
@@ -76,11 +103,12 @@ export const insertProduct = async (
   });
   if (images && images.length) {
     const prodImages = images.map(image => {
+      const data = fs.readFileSync(image.path)
       return {
-        // productId: newProduct.id,
+        productId: newProduct.id,
         imageType: image.mimetype,
         imageName: image.originalname,
-        imageData: image.buffer
+        imageData: data
       }
     });
     await ProductImage.bulkCreate(prodImages);
@@ -90,11 +118,27 @@ export const insertProduct = async (
 };
 
 export const updateProduct = async (id: string, status: string): Promise<Product|null> => {
-  const product = await getProduct(id);
+  const product = await Product.findOne({
+    where: { id },
+  });
+  console.log('Found product', product);
   if (product) {
     product.status = status;
-    await product?.save({fields: ['status']});
-    await product?.reload();
+    await product.save();
+    await product.reload();
   }
+  console.log('product updated', product);
   return product
+};
+
+export const insertOffer = async (
+  id: string,
+  userId: number,
+  offer: number,
+): Promise<ProductOffer> => {
+  return ProductOffer.create({
+    productId: Number(id),
+    userId,
+    offer,
+  });
 };

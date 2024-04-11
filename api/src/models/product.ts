@@ -6,7 +6,7 @@
  */
 import {
   DataTypes, Model, Sequelize, InferAttributes, InferCreationAttributes,
-  CreationOptional, NonAttribute, ForeignKey,
+  CreationOptional, ForeignKey, Association, NonAttribute,
 } from 'sequelize';
 import { User } from './user';
 import { ProductImage } from './productImage';
@@ -14,7 +14,7 @@ import { ProductOffer } from './productoffer';
 
 const sequelize = new Sequelize('postgres://link_user:password@db:5432/linkby');
 
-export class Product extends Model<InferAttributes<Product,  { omit: 'images' }>, InferCreationAttributes<Product,  { omit: 'images' }>> {
+export class Product extends Model<InferAttributes<Product,  {}>, InferCreationAttributes<Product,  {}>> {
   declare id: CreationOptional<number>;
   declare userId: ForeignKey<User['id']>;
   declare name: string;
@@ -30,10 +30,9 @@ export class Product extends Model<InferAttributes<Product,  { omit: 'images' }>
 
   declare images?: NonAttribute<ProductImage[]>;
 
-  // declare static associations: {
-  //   owner: Association<User, Product>;
-  //   images: Association<Product, ProductImage>;
-  // };
+  declare static associations: {
+    images: Association<Product, ProductImage>;
+  };
 }
 
 Product.init(
@@ -82,7 +81,7 @@ Product.hasMany(ProductOffer, {
   as: 'offers' // this determines the name in `associations`!
 });
 ProductOffer.belongsTo(Product, { foreignKey: 'productId', targetKey: 'id' });
-// ProductImage.belongsTo(Product, { foreignKey: 'productId', targetKey: 'id' })
+ProductImage.belongsTo(Product, { foreignKey: 'productId', targetKey: 'id' });
 
 // Product.belongsTo(User, { foreignKey: 'userId' });
 

@@ -8,14 +8,29 @@ interface ProductUser {
   name: string
 }
 
-interface Offer {
-  userId: number
+export interface ProductOffer {
+  user: ProductUser
   offer: number
   createdAt: Date
 }
+
+export interface IOffer {
+  productId: number
+  userId: number
+  offer: number
+}
+
 export interface ProductStatus {
   id: number
   status: StatusType
+}
+
+export interface IImage {
+  id: number
+  productId: number
+  imageType: string
+  imageName: string
+  imageData: string
 }
 
 export interface NewProduct {
@@ -23,14 +38,13 @@ export interface NewProduct {
   name: string
   price: number
   description: string
-  images: File[]
+  images: IImage[]
 }
 
 export interface Product extends NewProduct, ProductStatus {
   createdAt: Date
   updatedAt: Date
   user: ProductUser
-  offers: Offer[]
 }
 
 export const useProductStore = defineStore('product', () => {
@@ -62,15 +76,11 @@ export const useProductStore = defineStore('product', () => {
     }
   }
 
-  async function saveProduct(payload: NewProduct) {
+  async function saveProduct(payload: FormData) {
     try {
-      console.log('NewProduct', payload);
       const response = await fetch('http://localhost:3000/product', {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ...payload }),
+        body: payload,
       });
 
       if (!response.ok) {
@@ -103,7 +113,6 @@ export const useProductStore = defineStore('product', () => {
 
   async function updateProduct(payload: ProductStatus) {
     try {
-      console.log('NewProduct', payload);
       const response = await fetch(`http://localhost:3000/product/${payload.id}`, {
         method: "PUT",
         headers: {
@@ -120,5 +129,51 @@ export const useProductStore = defineStore('product', () => {
     }
   }
 
-  return { productList, getProducts, saveProduct, getProduct, updateProduct }
+  async function getProductOffers(id: string): Promise<ProductOffer[]|undefined> {
+    try {
+      const response = await fetch(`http://localhost:3000/product/${id}/offers`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+
+      if (response.ok) {
+        return await response.json();
+      } else {
+        console.error("Error:", response.status);
+      }
+
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
+  async function saveProductOffer(payload: IOffer) {
+    try {
+      const response = await fetch(`http://localhost:3000/product/${payload.productId}/offer`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...payload }),
+      });
+
+      if (!response.ok) {
+        console.error("Error:", response.status);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
+  return {
+    productList,
+    getProducts,
+    saveProduct,
+    getProduct,
+    updateProduct,
+    getProductOffers,
+    saveProductOffer
+  }
 })

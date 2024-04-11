@@ -12,7 +12,10 @@ const form = reactive({
 });
 
 async function handleSubmit() {
-  await authStore.doLogin({ email: 'test@mail.com', password: '123' });
+  await authStore.doLogin({
+    email: form.email,
+    password: form.password
+  });
   await router.push({ name: 'landing' });
 };
 

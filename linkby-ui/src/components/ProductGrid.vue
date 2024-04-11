@@ -25,5 +25,6 @@ const props = defineProps<Props>()
   gap: 1rem 1rem;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-template-rows: auto;
+  margin-bottom: 2rem;
 }
 </style>
