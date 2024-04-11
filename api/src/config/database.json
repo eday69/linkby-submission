@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "link_user",
+    "password": "password",
+    "database": "linkby",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "link_user",
+    "password": "password",
+    "database": "linkby",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "link_user",
+    "password": "password",
+    "database": "linkby",
+    "host": "localhost",
+    "dialect": "postgres"
+  }
+}
