@@ -30,7 +30,7 @@ async function handleSubmit() {
     form
   })
   await productStore.saveProduct({
-    ownerId: authStore.userId || 0,
+    userId: authStore.userId || 0,
     name: form.name.valueOf(),
     price: form.price.valueOf(),
     description: form.description.valueOf(),
@@ -52,7 +52,7 @@ async function handleCancel() {
       class="login-form"
       enctype="multipart/form-data"
     >
-      <input type="hidden" v-model="owner" name="ownerId">
+      <input type="hidden" v-model="owner" name="userId">
       <legend class="mb-5">
         <strong>Product Registration</strong>
       </legend>

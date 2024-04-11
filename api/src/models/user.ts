@@ -9,6 +9,7 @@ import {
   CreationOptional, Association, NonAttribute,
 } from 'sequelize';
 import { Product } from './product';
+import { ProductOffer } from './productoffer';
 
 const sequelize = new Sequelize('postgres://link_user:password@db:5432/linkby');
 
@@ -61,10 +62,11 @@ User.init(
 // Here we associate which actually populates out pre-declared `association` static and other methods.
 User.hasMany(Product, {
   sourceKey: 'id',
-  foreignKey: 'ownerId',
+  foreignKey: 'userId',
   as: 'products' // this determines the name in `associations`!
 });
-Product.belongsTo(User, { foreignKey: 'ownerId', targetKey: 'id' });
+Product.belongsTo(User, { foreignKey: 'userId', targetKey: 'id', as: 'user' });
+ProductOffer.belongsTo(User, { foreignKey: 'userId', targetKey: 'id', as: 'user' });
 
 (async () => {
   await sequelize.sync();

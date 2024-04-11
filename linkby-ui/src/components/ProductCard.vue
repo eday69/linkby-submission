@@ -14,8 +14,8 @@ const USDollar = new Intl.NumberFormat('en-US', {
   currency: 'USD',
 });
 
-async function handleClick(prodId: number) {
-  await router.push({ name: 'product-details', params: { prodId }});
+async function handleClick(id: number) {
+  await router.push({ name: 'product-details', params: { id }});
 }
 </script>
 
@@ -31,7 +31,7 @@ async function handleClick(prodId: number) {
   >
     <v-card-item>
       <div>
-        <div class="text-overline mb-1">{{ props.product.User.name }}</div>
+        <div class="text-overline mb-1">{{ props.product.user.name }}</div>
         <div class="text-h6 mb-1">
           {{ props.product.name }}
         </div>

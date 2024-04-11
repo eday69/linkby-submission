@@ -6,22 +6,23 @@
  */
 import {
   DataTypes, Model, Sequelize, InferAttributes, InferCreationAttributes,
-  CreationOptional, NonAttribute, ForeignKey, Association,
+  CreationOptional, NonAttribute, ForeignKey,
 } from 'sequelize';
 import { User } from './user';
 import { ProductImage } from './productImage';
+import { ProductOffer } from './productoffer';
 
 const sequelize = new Sequelize('postgres://link_user:password@db:5432/linkby');
 
 export class Product extends Model<InferAttributes<Product,  { omit: 'images' }>, InferCreationAttributes<Product,  { omit: 'images' }>> {
   declare id: CreationOptional<number>;
-  declare ownerId: ForeignKey<User['id']>;
+  declare userId: ForeignKey<User['id']>;
   declare name: string;
   declare description: string;
   declare price: number;
   declare status: string; // for nullable fields
 
-  declare owner?: NonAttribute<User>;
+  // declare owner?: NonAttribute<User>;
 
   // timestamps!
   declare createdAt: CreationOptional<Date>;
@@ -29,10 +30,10 @@ export class Product extends Model<InferAttributes<Product,  { omit: 'images' }>
 
   declare images?: NonAttribute<ProductImage[]>;
 
-  declare static associations: {
-    owner: Association<User, Product>;
-    images: Association<Product, ProductImage>;
-  };
+  // declare static associations: {
+  //   owner: Association<User, Product>;
+  //   images: Association<Product, ProductImage>;
+  // };
 }
 
 Product.init(
@@ -42,7 +43,7 @@ Product.init(
       autoIncrement: true,
       primaryKey: true
     },
-    ownerId: {
+    userId: {
       type: DataTypes.INTEGER,
     },
     name: {
@@ -75,9 +76,15 @@ Product.hasMany(ProductImage, {
   foreignKey: 'productId',
   as: 'images' // this determines the name in `associations`!
 });
+Product.hasMany(ProductOffer, {
+  sourceKey: 'id',
+  foreignKey: 'productId',
+  as: 'offers' // this determines the name in `associations`!
+});
+ProductOffer.belongsTo(Product, { foreignKey: 'productId', targetKey: 'id' });
 // ProductImage.belongsTo(Product, { foreignKey: 'productId', targetKey: 'id' })
 
-// Product.belongsTo(User, { foreignKey: 'ownerId' });
+// Product.belongsTo(User, { foreignKey: 'userId' });
 
 (async () => {
   await sequelize.sync();

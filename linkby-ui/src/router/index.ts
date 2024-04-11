@@ -23,7 +23,7 @@ const router = createRouter({
       component: LoginForm
     },
     {
-      path: '/product/:prodId',
+      path: '/product/:id',
       name: 'product-details',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
