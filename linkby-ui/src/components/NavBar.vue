@@ -18,7 +18,7 @@ async function handleLogOutClick() {
 <template>
   <v-app-bar :elevation="2" color="primary">
     <template v-slot:prepend>
-      <v-app-bar-nav-icon :to="{ name: 'landing' }"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon icon="mdi-home" :to="{ name: 'landing' }"></v-app-bar-nav-icon>
     </template>
 
     <v-app-bar-title>Market</v-app-bar-title>

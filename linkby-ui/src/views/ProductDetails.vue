@@ -24,30 +24,28 @@ const USDollar = new Intl.NumberFormat('en-US', {
   currency: 'USD',
 });
 const headers = [
-  { title: 'Timestamp', value: 'createdAt' },
-  { title: 'Name of Buyer', key: 'user.name' },
+  { title: 'Timestamp', value: 'createdAt', sortable: false },
+  { title: 'Name of Buyer', key: 'user.name', sortable: false },
   { title: 'Counter offer done by',
     key: 'counterOrigin',
-    value: (item: any) => product.value?.userId == item.user.id ? 'Seller' : 'Buyer'
+    value: (item: any) => product.value?.userId == item.user.id ? 'Seller' : 'Buyer',
+    sortable: false
   },
-  { title: 'Price offered', key: 'offer' },
-  { title: 'Actions', key: 'actions' },
+  { title: 'Price offered', key: 'offer', sortable: false },
+  { title: 'Actions', key: 'actions', sortable: false },
 ];
 
-
 const hasOffers = computed(() => offers.value && offers.value.length)
-const lastCounterOfferUserId = computed(() => offers.value && offers.value.length && offers.value[0].user.id);
 const isSeller = computed(() => product.value?.userId == authStore.userId);
-const isBuyer = computed(() => !isSeller.value);
-const isOfferFromSeller = computed(() => product.value?.userId === lastCounterOfferUserId.value);
-const showProdCounterButton = computed(() => isBuyer.value && (offers.value?.length === 0));
-const showPurchaseButton = computed(() => (isBuyer.value
+const isOfferFromSeller = computed(() => product.value?.userId === (offers.value && offers.value.length && offers.value[0].user.id));
+const showProdCounterButton = computed(() => !isSeller.value && (offers.value?.length === 0));
+const showPurchaseButton = computed(() => (!isSeller.value
   && (offers.value?.length === 0 || product.value?.status === Status.Reserved))
   && product.value?.status != Status.Sold);
 const showItemOfferButton = computed(() => !isOfferFromSeller.value
-  || (isBuyer.value && isOfferFromSeller.value));
+  || (!isSeller.value && isOfferFromSeller.value));
 const showItemAcceptButton = computed(() => (isSeller.value && !isOfferFromSeller.value)
-  || (isBuyer.value && isOfferFromSeller.value));
+  || (!isSeller.value && isOfferFromSeller.value));
 const isProductAvailable = computed(() => product.value?.status === Status.Available)
 
 async function loadOffers() {

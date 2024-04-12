@@ -18,8 +18,8 @@ There are 3 users available:
 ### Api is in `api` folder
 
 To run Api, `cd` into `api` folder.
-Need to run migrations: `npx sequelize-cli db:migrate`
 
-Projects includes seeding, run `npx sequelize-cli db:seed:all`
+First, run the api by `npm run docker:dev`
+Second, run migrations: `npx sequelize-cli db:migrate`
+Third, run seeding: `npx sequelize-cli db:seed:all`
 
-Now you can run the api by `npm run docker:dev` 

@@ -11,7 +11,7 @@ interface Props {
 }
 const imageSrc = computed(() => {
   if (props.image) {
-    return `data:image/jpeg;base64, ${props.image.imageData}`
+    return `data:${props.image.imageType};base64, ${props.image.imageData}`
   }
   return noImage
 })
