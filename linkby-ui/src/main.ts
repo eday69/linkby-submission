@@ -1,5 +1,3 @@
-import './assets/main.css'
-
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
@@ -13,11 +11,9 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { fa } from 'vuetify/iconsets/fa';
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
-import 'material-design-icons-iconfont/dist/material-design-icons.css';
+import "@mdi/font/css/materialdesignicons.css";
 
 const vuetify = createVuetify({
-  components,
-  directives,
   theme: {
     defaultTheme: 'light',
     //
@@ -30,6 +26,8 @@ const vuetify = createVuetify({
       fa,
     },
   },
+  components,
+  directives,
 })
 
 const app = createApp(App)
