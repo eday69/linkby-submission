@@ -1,9 +1,3 @@
-/**
- * Keep this file in sync with the code in the "Usage" section
- * in /docs/manual/other-topics/typescript.md
- *
- * Don't include this comment in the md file.
- */
 import {
   DataTypes, Model, Sequelize, InferAttributes, InferCreationAttributes,
   CreationOptional, ForeignKey, Association, NonAttribute,
@@ -82,8 +76,6 @@ Product.hasMany(ProductOffer, {
 });
 ProductOffer.belongsTo(Product, { foreignKey: 'productId', targetKey: 'id' });
 ProductImage.belongsTo(Product, { foreignKey: 'productId', targetKey: 'id' });
-
-// Product.belongsTo(User, { foreignKey: 'userId' });
 
 (async () => {
   await sequelize.sync();

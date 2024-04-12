@@ -22,7 +22,6 @@ export async function productHandler(
   req: Request,
   res: Response
 ) {
-  // console.log('incoming', req.body);
   const { id } = req.params
   const product = await getProduct(id);
 
@@ -40,7 +39,6 @@ export async function productOffersHandler(
   req: Request,
   res: Response
 ) {
-  // console.log('incoming', req.body);
   const { id } = req.params
   const product = await getProductOffers(id);
 
@@ -65,14 +63,12 @@ export async function newProductHandler(
   console.log('received ', req.body, images);
   const product = await insertProduct(userId, name, price, description, images);
   return res.status(201).json({ product })
-  // res.json({ products: products.map(p => p.dataValues) });
 }
 
 export async function productUpdateHandler(
   req: Request,
   res: Response
 ) {
-  // console.log('incoming', req.body);
   const { id } = req.params
   const { status } = req.body;
   const product = await updateProduct(id, status);
@@ -97,5 +93,4 @@ export async function productNewOfferHandler(
 
   const product = await insertOffer(id, userId, offer);
   return res.status(201).json({ product })
-  // res.json({ products: products.map(p => p.dataValues) });
 }

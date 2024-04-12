@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
 import type { Product } from '@/stores/product'
 import ImageDisplay from '@/components/ImageDisplay.vue'
-import { useRouter } from 'vue-router';
 
 interface Props {
   product: Product
@@ -40,7 +40,7 @@ async function handleClick(id: number) {
           height="300"
           :image="props.product.images[0]"
         />
-        <div class="status-container">
+        <div class="status-container mt-2">
           <div class="text-caption">
             {{ USDollar.format(props.product.price) }}
           </div>

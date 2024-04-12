@@ -1,9 +1,3 @@
-/**
- * Keep this file in sync with the code in the "Usage" section
- * in /docs/manual/other-topics/typescript.md
- *
- * Don't include this comment in the md file.
- */
 import {
   DataTypes, Model, Sequelize, InferAttributes, InferCreationAttributes,
   CreationOptional, ForeignKey,
@@ -22,8 +16,6 @@ export class ProductImage extends Model<InferAttributes<ProductImage, {}>, Infer
   // timestamps!
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
-
-
 }
 
 ProductImage.init(

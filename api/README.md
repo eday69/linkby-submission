@@ -2,9 +2,11 @@
 
 Using nodeJS, express, sequelize, postgres
 
+Both Api (nodeJS/express]) and DB (Postgres) are running in a docker container.
+
 Important:
 - Unit test's are not built yet.
-- Build not tested
+- Build not tested (it works on my machine !)
 
 ## Project Setup
 

@@ -1,9 +1,3 @@
-/**
- * Keep this file in sync with the code in the "Usage" section
- * in /docs/manual/other-topics/typescript.md
- *
- * Don't include this comment in the md file.
- */
 import {
   DataTypes, Model, Sequelize, InferAttributes, InferCreationAttributes,
   CreationOptional, Association, NonAttribute,
@@ -28,7 +22,6 @@ export class User extends Model<InferAttributes<User, { omit: 'products' }>, Inf
   declare static associations: {
     products: Association<User, Product>;
   };
-
 }
 
 User.init(

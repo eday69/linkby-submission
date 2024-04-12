@@ -34,18 +34,21 @@ const headers = [
   { title: 'Actions', key: 'actions' },
 ];
 
-const isPurchaseButtonVisible = computed(() => {
-  return product.value?.userId != authStore.userId
-    && product.value?.status != Status.Sold
-});
 
-const lastCounterOfferUserId = computed(() => offers.value && offers?.value[0].user.id);
+const hasOffers = computed(() => offers.value && offers.value.length)
+const lastCounterOfferUserId = computed(() => offers.value && offers.value.length && offers.value[0].user.id);
 const isSeller = computed(() => product.value?.userId == authStore.userId);
-const isCounterBuyer = computed(() => product.value?.userId != lastCounterOfferUserId.value);
-const isShowCounterOfferButtonVisible = computed(() => {
-  return (!isSeller.value && offers.value?.length === 0)
-    || isCounterBuyer.value;
-});
+const isBuyer = computed(() => !isSeller.value);
+const isOfferFromSeller = computed(() => product.value?.userId === lastCounterOfferUserId.value);
+const showProdCounterButton = computed(() => isBuyer.value && (offers.value?.length === 0));
+const showPurchaseButton = computed(() => (isBuyer.value
+  && (offers.value?.length === 0 || product.value?.status === Status.Reserved))
+  && product.value?.status != Status.Sold);
+const showItemOfferButton = computed(() => !isOfferFromSeller.value
+  || (isBuyer.value && isOfferFromSeller.value));
+const showItemAcceptButton = computed(() => (isSeller.value && !isOfferFromSeller.value)
+  || (isBuyer.value && isOfferFromSeller.value));
+const isProductAvailable = computed(() => product.value?.status === Status.Available)
 
 async function loadOffers() {
   offers.value = await productStore.getProductOffers(route.params.id as string);
@@ -62,11 +65,11 @@ async function handleCounterOfferValue(value: string) {
       userId: authStore.userId,
       offer: Number(value)
     });
-    await loadOffers();
+    await router.push({ name: 'landing' });
   }
 }
 
-async function updateProductStatus(status: string) {
+async function updateProductStatus(status: Status) {
   if (product.value) {
     await productStore.updateProduct({
       id: product.value.id,
@@ -84,13 +87,7 @@ function acceptCounterOffer() {
   updateProductStatus(Status.Reserved)
 }
 
-function newCounterOffer() {
-
-}
-
 onMounted(async () => {
-  console.log(`loading product ${route.params.id} ...`);
-
   product.value = await productStore.getProduct(route.params.id as string);
   loadOffers()
 })
@@ -124,7 +121,7 @@ onMounted(async () => {
         class='mx-5 login-btn'
         color='pink'
         @click="handlePurchaseClick"
-        v-if="isPurchaseButtonVisible"
+        v-if="showPurchaseButton"
       >
         Purchase
       </v-btn>
@@ -132,11 +129,11 @@ onMounted(async () => {
         class='mx-5 login-btn'
         color='pink'
         @click="handleCounterOfferClick"
-        v-if="isShowCounterOfferButtonVisible">
+        v-if="showProdCounterButton">
         Counter Offer
       </v-btn>
     </div>
-    <div class="pt-10">
+    <div class="pt-10" v-if="hasOffers">
       <div>Negotiation History</div>
       <v-data-table
         :headers="headers"
@@ -144,20 +141,20 @@ onMounted(async () => {
         item-key="name"
         items-per-page="0"
       >
-        <template v-slot:[`item.actions`]="{ item }">
-          <div class="actions">
+        <template v-slot:[`item.actions`]="{ index }">
+          <div class="actions" v-if="index === 0 && isProductAvailable">
             <v-btn
               color='pink'
               size="x-small"
-              @click="newCounterOffer">
+              @click="handleCounterOfferClick"
+              v-if="showItemOfferButton">
               Counter Offer
             </v-btn>
             <v-btn
               color='pink'
               size="x-small"
               @click="acceptCounterOffer"
-              v-if="isSeller && isCounterBuyer"
-            >
+              v-if="showItemAcceptButton">
               Accept
             </v-btn>
           </div>

@@ -1,30 +1,3 @@
-// 'use strict';
-// import { CreationOptional, ForeignKey, InferAttributes, InferCreationAttributes, Sequelize } from 'sequelize';
-// import { User } from './user';
-//
-// const {
-//   Model
-// } = require('sequelize');
-// module.exports = (sequelize, DataTypes) => {
-//   class ProductOffers extends Model {
-//     /**
-//      * Helper method for defining associations.
-//      * This method is not a part of Sequelize lifecycle.
-//      * The `models/index` file will call this method automatically.
-//      */
-//     static associate(models) {
-//       // define association here
-//     }
-//   }
-//   ProductOffers.init({
-//     offer: DataTypes.NUMBER,
-//     userId: DataTypes.NUMBER
-//   }, {
-//     sequelize,
-//     modelName: 'ProductOffers',
-//   });
-//   return ProductOffers;
-// };
 import {
   DataTypes, Model, Sequelize, InferAttributes, InferCreationAttributes,
   CreationOptional, ForeignKey,

@@ -22,12 +22,15 @@ const props = defineProps<Props>()
   <v-img
     :width="width"
     :height="height"
-    aspect-ratio="16/9"
+    aspect-ratio="1"
+    class="image"
     cover
     :src="imageSrc"
   ></v-img>
 </template>
 
 <style scoped>
-
+.image {
+  border: 1px solid lightgrey;
+}
 </style>

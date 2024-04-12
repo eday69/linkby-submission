@@ -121,13 +121,11 @@ export const updateProduct = async (id: string, status: string): Promise<Product
   const product = await Product.findOne({
     where: { id },
   });
-  console.log('Found product', product);
   if (product) {
     product.status = status;
     await product.save();
     await product.reload();
   }
-  console.log('product updated', product);
   return product
 };
 

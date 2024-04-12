@@ -6,7 +6,6 @@ import { onMounted } from 'vue'
 const productStore = useProductStore()
 
 onMounted(async () => {
-  console.log('loading products ...')
   await productStore.getProducts();
 })
 

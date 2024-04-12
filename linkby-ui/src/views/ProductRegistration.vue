@@ -10,13 +10,11 @@ const router = useRouter();
 const valid = ref(false);
 const imgs = ref([]);
 const owner = computed(() => authStore.userId || 0)
-
 const form = reactive({
   name: "",
   price: 0,
   description: '',
 });
-
 const maxSize = 5 * 1024 * 1024; // 5 MB
 const rules = [
   (files: File[]) => !files.some(file => file.size > maxSize) || 'Image size should be less than 5 MB!',

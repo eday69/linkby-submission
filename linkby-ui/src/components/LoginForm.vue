@@ -2,10 +2,9 @@
 import { reactive } from "vue";
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router';
+
 const router = useRouter();
-
 const authStore = useAuthStore();
-
 const form = reactive({
   email: "",
   password: "",
@@ -61,15 +60,6 @@ async function handleSubmit() {
   .login-form {
     width: 50%;
   }
-  /*  body {*/
-  /*    display: flex;*/
-  /*    place-items: center;*/
-  /*  }*/
-  /*  #app {*/
-  /*    display: grid;*/
-  /*    grid-template-columns: 1fr 1fr;*/
-  /*    padding: 0 2rem;*/
-  /*  }*/
 }
 
 </style>
